@@ -1,8 +1,8 @@
 hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
-updated: 2016-09-20T14:14:33.824226453-05:00
+updated: 2016-09-20T18:29:30.294077248-05:00
 imports:
 - name: github.com/datianshi/rest-func
-  version: d94a57662503c2bb64a9f0bb95e6223076a2fa5f
+  version: 5ea4d14722cf503f70c4640a8ecf5b4497cc761f
   subpackages:
   - rest
 devImports: []
