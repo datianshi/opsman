@@ -1,0 +1,5 @@
+package: github.com/datianshi/opsman
+import:
+- package: github.com/datianshi/rest-func
+  subpackages:
+  - rest
