@@ -39,7 +39,6 @@ func (u *UAA) GetToken() (token string, err error) {
 	defer body.Close()
 	tokenResp := &TokenResponse{}
 	data, err := ioutil.ReadAll(body)
-	fmt.Println(string(data))
 	if err != nil {
 		return
 	}
