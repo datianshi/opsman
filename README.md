@@ -3,7 +3,7 @@
 ## Why create this tool?
 
 * Pivotal Ops Manager has an API
-* People wants a CLI Took to interact with OpsManager (I like curl though)
+* People wants a CLI Tool to interact with OpsManager (I like curl though)
 
 ## What does this tool doing?
 
