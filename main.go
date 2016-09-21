@@ -7,6 +7,7 @@ import (
 	"github.com/datianshi/opsman/uaa"
 	"github.com/datianshi/opsman/pivnet"
 	"github.com/cloudfoundry/gofileutils/fileutils"
+	"github.com/datianshi/opsman/opsman"
 )
 
 func main() {
@@ -23,6 +24,12 @@ func main() {
 			Usage: "download product",
 			Action: DownloadProduct,
 			Flags: []cli.Flag{ProductURL, PivnetToken, SaveProductTo},
+		},
+		{
+			Name: "upload",
+			Usage: "upload product",
+			Action: UploadProduct,
+			Flags: []cli.Flag{OpsManagerURLFlag, Username, Password, UploadProductFrom, SkipSSL},
 		},
 	}
 	app.Run(os.Args)
@@ -118,4 +125,25 @@ func RetrieveToken(c *cli.Context) error {
 	}
 	fmt.Println(token)
 	return nil
+}
+
+func UploadProduct(c *cli.Context) (err error ){
+	opsManagerURL := c.String("opsmanurl")
+	username := c.String("username")
+	password := c.String("password")
+	uploadProductFrom:= c.String("from")
+	skipSsl := c.Bool("skipssl")
+
+	opsMan := &opsman.OpsMan{
+		Username: username,
+		Password: password,
+		OpsManUrl: opsManagerURL,
+		SkipSsl: skipSsl,
+	}
+	file, err:= os.Open(uploadProductFrom)
+	defer file.Close()
+	if(err!=nil){
+		return
+	}
+	return opsMan.Upload(file)
 }
