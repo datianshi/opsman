@@ -5,7 +5,7 @@
 * Pivotal Ops Manager has API endpoints
 * People want a CLI Tool to interact with OpsManager (I like curl though)
 
-## What does this tool doing?
+## What does this tool do?
 
 * Retrieve Ops Manager UAA Token
 
