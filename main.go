@@ -7,7 +7,12 @@ import (
 )
 
 func main() {
-	app := &cli.App{}
+	const VERSION string = "0.0.1"
+	app := &cli.App{
+		Name: "opsman-cli",
+		HelpName: "opsman-cli",
+		Version: VERSION,
+	}
 	app.Commands = []*cli.Command{
 		{
 			Name:   "token",
