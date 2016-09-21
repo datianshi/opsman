@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 )
 
-var _ = Describe("Given a Pivnet product and token", func() {
+var _ = FDescribe("Given a Pivnet product and token", func() {
 	var dest *os.File
 	var pivnet *Pivnet
 	BeforeEach(func() {

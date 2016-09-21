@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-var _ = Describe("Given an OpsMan", func() {
+var _ = FDescribe("Given an OpsMan", func() {
 	var opsMan *OpsMan
 	var productFile *os.File
 

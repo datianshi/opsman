@@ -1,8 +1,10 @@
 hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
-updated: 2016-09-20T18:29:30.294077248-05:00
+updated: 2016-09-21T09:24:18.253365126-05:00
 imports:
 - name: github.com/datianshi/rest-func
-  version: 5ea4d14722cf503f70c4640a8ecf5b4497cc761f
+  version: e8b1d408b32b7d74b6c741a026be66a51e898aeb
   subpackages:
   - rest
+- name: gopkg.in/urfave/cli.v2
+  version: c72728f42438425ffcd487986936357e17ebba3f
 devImports: []
