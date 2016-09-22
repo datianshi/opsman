@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	const VERSION string = "0.0.1"
+	const VERSION string = "0.0.2"
 	app := &cli.App{
 		Name: "opsman-cli",
 		HelpName: "opsman-cli",

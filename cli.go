@@ -68,7 +68,7 @@ func DownloadProduct(c *cli.Context) (err error){
 	productURL := c.String("producturl")
 	token := c.String("token")
 	saveProductTo:= c.String("dest")
-	file, err:= os.Open(saveProductTo)
+	file, err:= os.Create(saveProductTo)
 	defer file.Close()
 	if(err!=nil){
 		return
