@@ -1,10 +1,13 @@
 hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
-updated: 2016-09-23T08:56:41.336301052-05:00
+updated: 2016-09-23T12:52:20.030033061-05:00
 imports:
 - name: github.com/datianshi/rest-func
-  version: e071c85b119b702bfa4431c7c4cc92ce6f5d4702
+  version: 5c6e04afcd8f1f0cdb7167d0c5055827adcefb2c
   subpackages:
   - rest
+  - barfile
+- name: gopkg.in/cheggaaa/pb.v1
+  version: 9453b2db37f4d8bc63751daca63bbe7049eb5e74
 - name: gopkg.in/urfave/cli.v2
   version: c72728f42438425ffcd487986936357e17ebba3f
 devImports: []

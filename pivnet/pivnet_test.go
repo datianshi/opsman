@@ -16,7 +16,7 @@ var _ = FDescribe("Given a Pivnet product and token", func() {
 		dest, _= ioutil.TempFile("", "test")
 		pivnet = &Pivnet{
 			URL: "https://network.pivotal.io/api/v2/products/apigee-edge-for-pcf-service-broker/releases/1773/product_files/4698/download",
-			Token: "wtKajG26LMsv3JDN_sCB",
+			Token: "XXXX",
 		}
 	})
 	Context("When Pivnet request the product", func() {
