@@ -1,8 +1,8 @@
 hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
-updated: 2016-09-23T12:52:20.030033061-05:00
+updated: 2016-09-23T13:15:57.207309766-05:00
 imports:
 - name: github.com/datianshi/rest-func
-  version: 5c6e04afcd8f1f0cdb7167d0c5055827adcefb2c
+  version: 9704e04ca32bfb1866df0e47b71b061068124774
   subpackages:
   - rest
   - barfile

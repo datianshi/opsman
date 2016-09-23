@@ -32,6 +32,7 @@ func (p *Pivnet) Download(dest io.Writer) (err error) {
 	bar.Start()
 	reader:= bar.NewProxyReader(resp.Body)
 	_, err = io.Copy(dest, reader)
+	bar.Finish()
 	return
 }
 
