@@ -1,0 +1,12 @@
+hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
+updated: 2016-09-22T17:34:54.448157023-05:00
+imports:
+- name: github.com/datianshi/opsman
+  version: aaa2722ea20ef26e33c3f0ae005dd61b37243b5a
+  subpackages:
+  - uaa
+- name: github.com/datianshi/rest-func
+  version: e8b1d408b32b7d74b6c741a026be66a51e898aeb
+  subpackages:
+  - rest
+devImports: []

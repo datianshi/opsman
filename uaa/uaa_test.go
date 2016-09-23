@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Uaa", func() {
+var _ = FDescribe("Uaa", func() {
 
 	uaaRequest := &UAA{
 		URL:      "https://opsmgr.haas-22.pez.pivotal.io/uaa",
@@ -16,7 +16,7 @@ var _ = Describe("Uaa", func() {
 		SkipSsl:  true,
 	}
 
-	FDescribe("Retrieve Token", func() {
+	Describe("Retrieve Token", func() {
 		Context("When requesting token", func() {
 			It("err should be nil", func() {
 				_, err := uaaRequest.GetToken()
