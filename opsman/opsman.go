@@ -11,24 +11,27 @@ import (
 
 type OpsMan struct{
 	OpsManUrl string
-	Username string
-	Password string
 	SkipSsl  bool
+	tokenIssuer uaa.TokenIssuer
 }
 
-func (p *OpsMan) Upload(file *os.File) error{
-	uaa:= &uaa.UAA{
-		URL: fmt.Sprintf("%s/uaa", p.OpsManUrl),
-		Username: p.Username,
-		Password: p.Password,
-		SkipSsl: p.SkipSsl,
+func CreateOpsman(url string, skipssl bool, tokenIssuer uaa.TokenIssuer) *OpsMan{
+	return &OpsMan{
+		OpsManUrl: url,
+		SkipSsl: skipssl,
+		tokenIssuer: tokenIssuer,
 	}
-	token, err :=uaa.GetToken()
+}
+
+const UPLOAD_PRODUCT_PATH string = "/api/v0/available_products"
+
+func (p *OpsMan) Upload(file *os.File) error{
+	token, err := p.tokenIssuer.GetToken()
 	if(err!=nil){
 		return err
 	}
 	r := &rest.Rest{
-		URL: fmt.Sprintf("%s/api/v0/available_products", p.OpsManUrl),
+		URL: fmt.Sprintf("%s%s", p.OpsManUrl, UPLOAD_PRODUCT_PATH),
 	}
 	resp, err:=r.Build().
 		WithHttpMethod(rest.POST).

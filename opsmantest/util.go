@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"os"
 
-	. "github.com/onsi/gomega"
 	"io/ioutil"
+
+	. "github.com/onsi/gomega"
 )
 
 type FakeTokenIssuer struct {
@@ -34,14 +35,17 @@ func CompareMd5(buffer *bytes.Buffer, b_array *[]byte) bool {
 	return true
 }
 
-func Md5FileSum(file *os.File) (md5str string, err error) {
-	b := &bytes.Buffer{}
-	_, err = io.Copy(b, file)
+func Md5FileSum(path string) (md5str string, err error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return
 	}
-	fmt.Println(len(b.Bytes()))
-	md5str = Md5Bytes(b.Bytes())
+	b, err := ioutil.ReadAll(file)
+	if err != nil {
+		return
+	}
+	fmt.Println(len(b))
+	md5str = Md5Bytes(b)
 	return
 }
 
@@ -50,28 +54,36 @@ func Md5Bytes(b []byte) (md5str string) {
 	return
 }
 
-func VerifyUploadFile(file *os.File) http.HandlerFunc {
+func VerifyUploadFile(path string, formValue string) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		md5str, err := Md5FileSum(file)
+		md5str, err := Md5FileSum(path)
 		Ω(err).Should(BeNil())
 		if err == nil {
 			defer req.Body.Close()
-			b := &bytes.Buffer{}
-			fmt.Println(b.String())
-			io.Copy(b, req.Body)
-			fmt.Println(md5str)
-			Ω(md5str).Should(Equal(Md5Bytes(b.Bytes())), "Upload file md5sum mismatch")
+			read_form , _ := req.MultipartReader()
+			for {
+				part, err_part := read_form.NextPart()
+				if err_part == io.EOF {
+					break
+				}
+				if part.FormName() == formValue {
+					buf := new(bytes.Buffer)
+					buf.ReadFrom(part)
+					Ω(md5str).Should(Equal(Md5Bytes(buf.Bytes())), "Upload file md5sum mismatch")
+					return
+				}
+			}
+			Ω(true).Should(Equal(false), fmt.Sprintf("There is not form part: %s", formValue))
 		}
 	}
 }
 
-func CreateGarbageFile(content string) (file *os.File, err error) {
-	file, err = ioutil.TempFile("", "garbage")
+func CreateGarbageFile(content string) (path string, err error) {
+	file, err := ioutil.TempFile("", "garbage")
 	if err != nil {
 		return
 	}
 	io.Copy(file, bytes.NewBufferString(content))
-	file.Close()
-	fmt.Println(file.Name())
-	return os.Open(file.Name())
+	path = file.Name()
+	return
 }
