@@ -21,9 +21,13 @@ type TokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+type TokenIssuer interface {
+	GetToken() (string, error)
+}
+
 func (u *UAA) GetToken() (token string, err error) {
 	r := &rest.Rest{
-		URL: fmt.Sprintf("%s/oauth/token", u.URL),
+		URL: fmt.Sprintf("%s/uaa/oauth/token", u.URL),
 	}
 	formValues := url.Values{"grant_type": {"password"}, "username": {u.Username}, "password": {u.Password}}
 	response, err := r.Build().

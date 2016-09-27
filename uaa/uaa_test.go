@@ -5,27 +5,52 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/ghttp"
 )
 
-var _ = FDescribe("Uaa", func() {
+const TOKEN_PATH = "/uaa/oauth/token"
+const USERNAME = "admin"
+const PASSWORD = "password"
 
-	uaaRequest := &UAA{
-		URL:      "https://opsmgr.haas-22.pez.pivotal.io/uaa",
-		Username: "admin",
-		Password: "password",
-		SkipSsl:  true,
-	}
+var WRITE_CONTENT string = `{
+	"access_token" : "helloworld"
+}`
 
-	Describe("Retrieve Token", func() {
-		Context("When requesting token", func() {
-			It("err should be nil", func() {
-				_, err := uaaRequest.GetToken()
-				Ω(err).Should(BeNil())
-			})
-			It("token should be returned", func() {
-				token, _ := uaaRequest.GetToken()
-				Ω(token).ShouldNot(BeNil())
-			})
+var _ = Describe("Uaa", func() {
+
+	var server *ghttp.Server
+	var uaaRequest *UAA
+	var statusCode int
+
+	BeforeEach(func() {
+		statusCode = 200
+		server = ghttp.NewServer()
+		uaaRequest = &UAA{
+			URL:      server.URL(),
+			Username: USERNAME,
+			Password: PASSWORD,
+			SkipSsl:  true,
+		}
+		server.AppendHandlers(ghttp.CombineHandlers(
+			ghttp.VerifyRequest("POST", TOKEN_PATH),
+			ghttp.VerifyBasicAuth("opsman", ""),
+			ghttp.RespondWithPtr(&statusCode, &WRITE_CONTENT),
+		),)
+	})
+
+	Context("When server returned token successfully", func() {
+		It("err should be nil", func() {
+			_, err := uaaRequest.GetToken()
+			Ω(err).Should(BeNil())
 		})
+		It("token should be returned", func() {
+			token, _ := uaaRequest.GetToken()
+			Ω(token).Should(Equal("helloworld"))
+		})
+	})
+
+
+	AfterEach(func() {
+		server.Close()
 	})
 })
