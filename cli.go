@@ -90,7 +90,7 @@ func RetrieveToken(c *cli.Context) error {
 	uaa := &uaa.UAA{
 		Username: username,
 		Password: password,
-		URL: fmt.Sprintf("%s/uaa", opsManagerURL),
+		URL: opsManagerURL,
 		SkipSsl: skipSsl,
 	}
 	token, err := uaa.GetToken();
