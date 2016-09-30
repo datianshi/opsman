@@ -108,12 +108,14 @@ func UploadProduct(c *cli.Context) (err error ){
 	uploadProductFrom:= c.String("from")
 	skipSsl := c.Bool("skipssl")
 
-	opsMan := &opsman.OpsMan{
+	uaa := &uaa.UAA{
 		Username: username,
 		Password: password,
-		OpsManUrl: opsManagerURL,
+		URL: opsManagerURL,
 		SkipSsl: skipSsl,
 	}
+
+	opsMan := opsman.CreateOpsman(opsManagerURL, skipSsl, uaa)
 	file, err:= os.Open(uploadProductFrom)
 	defer file.Close()
 	if(err!=nil){
