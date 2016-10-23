@@ -1,13 +1,29 @@
 hash: 3e0013978096e152b88cd43a837d1f86c47c4b96c930da41be6114c7a5ee15a5
-updated: 2016-09-23T13:15:57.207309766-05:00
+updated: 2016-10-23T15:30:09.220965485-05:00
 imports:
 - name: github.com/datianshi/rest-func
-  version: 9704e04ca32bfb1866df0e47b71b061068124774
+  version: ea75b85a4a82d713851e2f032f1b2c4b0a56c230
   subpackages:
   - rest
   - barfile
+- name: github.com/onsi/gomega
+  version: d59fa0ac68bb5dd932ee8d24eed631cdd519efc3
+  subpackages:
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/testingtsupport
+  - matchers
+  - types
+  - internal/oraclematcher
+  - format
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
 - name: gopkg.in/cheggaaa/pb.v1
   version: 9453b2db37f4d8bc63751daca63bbe7049eb5e74
 - name: gopkg.in/urfave/cli.v2
   version: c72728f42438425ffcd487986936357e17ebba3f
+- name: gopkg.in/yaml.v2
+  version: a5b47d31c556af34a302ce5d659e6fea44d90de0
 devImports: []
