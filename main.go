@@ -27,16 +27,23 @@ func main() {
 			Flags:  []cli.Flag{ProductURL, PivnetToken, SaveProductTo},
 		},
 		{
-			Name:   "upload-product",
-			Usage:  "upload product",
-			Action: UploadProduct,
-			Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, UploadProductFrom, SkipSSL},
-		},
-		{
-			Name:   "upload-stemcell",
-			Usage:  "upload stemcell",
-			Action: UploadStemcell,
-			Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, UploadStemcellFrom, SkipSSL},
+			Name:   "upload",
+			Usage:  "upload",
+			Subcommands: []*cli.Command{
+				{
+					Name:   "product",
+					Usage:  "product",
+					Action: UploadProduct,
+					Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, UploadProductFrom, SkipSSL},
+				},
+				{
+					Name:   "stemcell",
+					Usage:  "stemcell",
+					Action: UploadStemcell,
+					Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, UploadStemcellFrom, SkipSSL},
+				},
+			},
+
 		},
 	}
 	app.Run(os.Args)
