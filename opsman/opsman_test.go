@@ -12,18 +12,31 @@ import (
 	"github.com/datianshi/opsman/uaa"
 )
 
-const UPLOAD_PRODUCT string = "/uaa/oauth/token"
 const TOKEN string = "Hello World"
-const OPS_USERNAME = "admin"
 
+var opsMan *OpsMan
+var statusCode int
+var productFile string
+var server *ghttp.Server
+var tokenIssuer uaa.TokenIssuer
+
+type upload func(* os.File) error
 var _ = Describe("Given an OpsMan", func() {
-	var opsMan *OpsMan
-	var statusCode int
-	var productFile string
-	var server *ghttp.Server
-	var tokenIssuer uaa.TokenIssuer
 
-	Describe("Upload a product", func() {
+	var uploadProduct upload = func(file *os.File) error{
+		return opsMan.UploadProduct(file)
+	}
+
+	var uploadStemcell upload = func(file *os.File) error{
+		return opsMan.UploadStemcell(file)
+	}
+
+	describeUpload("Upload a product", UPLOAD_PRODUCT_PATH, UPLOAD_PRODUCT_FORM_PARAM, uploadProduct)
+	describeUpload("Upload a stemcell", UPLOAD_STEMCELL_PATH, UPLOAD_STEMCELL_FORM_PARAM, uploadStemcell)
+})
+
+func describeUpload(describe, uploadUrl , uploadForm string, up upload){
+	Describe(describe, func() {
 		BeforeEach(func() {
 			server = ghttp.NewServer()
 			tokenIssuer = &opsmantest.FakeTokenIssuer{
@@ -34,9 +47,9 @@ var _ = Describe("Given an OpsMan", func() {
 			opsMan = CreateOpsman(server.URL(), false, tokenIssuer)
 			productFile, _ = opsmantest.CreateGarbageFile("sdhfajhfasdasdhfajshdf")
 			server.AppendHandlers(ghttp.CombineHandlers(
-				ghttp.VerifyRequest("POST", UPLOAD_PRODUCT_PATH),
+				ghttp.VerifyRequest("POST", uploadUrl),
 				ghttp.VerifyHeaderKV("Authorization", fmt.Sprintf("Bearer %s", TOKEN)),
-				opsmantest.VerifyUploadFile(productFile, "product[file]"),
+				opsmantest.VerifyUploadFile(productFile, uploadForm),
 				ghttp.RespondWithPtr(&statusCode, nil),
 			))
 		})
@@ -45,7 +58,7 @@ var _ = Describe("Given an OpsMan", func() {
 			It("Should not have any err happened", func() {
 				file, _ := os.Open(productFile)
 				defer file.Close()
-				err := opsMan.Upload(file)
+				err := up(file)
 				Ω(err).ShouldNot(HaveOccurred())
 			})
 		})
@@ -56,7 +69,7 @@ var _ = Describe("Given an OpsMan", func() {
 			It("Should not have  err happened", func() {
 				file, _ := os.Open(productFile)
 				defer file.Close()
-				err := opsMan.Upload(file)
+				err := up(file)
 				Ω(err).Should(HaveOccurred())
 			})
 		})
@@ -66,4 +79,4 @@ var _ = Describe("Given an OpsMan", func() {
 		})
 	})
 
-})
+}
