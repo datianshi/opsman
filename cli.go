@@ -8,6 +8,7 @@ import (
 	"github.com/datianshi/opsman/pivnet"
 	"github.com/datianshi/opsman/uaa"
 	"gopkg.in/urfave/cli.v2"
+	"encoding/json"
 )
 
 var OpsManagerURLFlag *cli.StringFlag = &cli.StringFlag{
@@ -22,6 +23,13 @@ var ProductURL *cli.StringFlag = &cli.StringFlag{
 	Aliases: []string{"prod"},
 	Usage:   "pivnet product url",
 	EnvVars: []string{"PRODUCT_URL"},
+}
+
+var ProductNAME *cli.StringFlag = &cli.StringFlag{
+	Name:    "productname",
+	Aliases: []string{"name"},
+	Usage:   "pivnet product name",
+	EnvVars: []string{"PRODUCT_NAME"},
 }
 
 var PivnetToken *cli.StringFlag = &cli.StringFlag{
@@ -86,6 +94,28 @@ func DownloadProduct(c *cli.Context) (err error) {
 		Token: token,
 	}
 	err = pivnet.Download(file, productURL)
+	return
+}
+
+func LatestProduct(c *cli.Context) (err error) {
+	productName := c.String("productname")
+	token := c.String("token")
+	if err != nil {
+		return
+	}
+	pivnet := pivnet.Pivnet{
+		PivURL: "https://network.pivotal.io/",
+		Token: token,
+	}
+	product, err := pivnet.LatestProduct(productName)
+	if(err!=nil){
+		return
+	}
+	b, err := json.Marshal(product)
+	if(err!=nil){
+		return
+	}
+	fmt.Println(string(b))
 	return
 }
 

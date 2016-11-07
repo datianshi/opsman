@@ -7,11 +7,11 @@ import (
 )
 
 func main() {
-	const VERSION string = "0.0.2"
+	const VERSION string = "0.0.7"
 	app := &cli.App{
-		Name: "opsman-cli",
+		Name:     "opsman-cli",
 		HelpName: "opsman-cli",
-		Version: VERSION,
+		Version:  VERSION,
 	}
 	app.Commands = []*cli.Command{
 		{
@@ -21,14 +21,26 @@ func main() {
 			Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, SkipSSL},
 		},
 		{
-			Name:   "download",
-			Usage:  "download product",
-			Action: DownloadProduct,
-			Flags:  []cli.Flag{ProductURL, PivnetToken, SaveProductTo},
+			Name:        "pivnet",
+			Usage:       "pivnet",
+			Subcommands: []*cli.Command{
+				{
+					Name:   "download",
+					Usage:  "download product",
+					Action: DownloadProduct,
+					Flags:  []cli.Flag{ProductURL, PivnetToken, SaveProductTo},
+				},
+				{
+					Name:   "latest-release",
+					Usage:  "Latest Release",
+					Action: LatestProduct,
+					Flags:  []cli.Flag{ProductNAME, PivnetToken},
+				},
+			},
 		},
 		{
-			Name:   "upload",
-			Usage:  "upload",
+			Name:  "upload",
+			Usage: "upload",
 			Subcommands: []*cli.Command{
 				{
 					Name:   "product",
@@ -43,7 +55,6 @@ func main() {
 					Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, UploadStemcellFrom, SkipSSL},
 				},
 			},
-
 		},
 	}
 	app.Run(os.Args)
