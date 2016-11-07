@@ -82,10 +82,10 @@ func DownloadProduct(c *cli.Context) (err error) {
 		return
 	}
 	pivnet := pivnet.Pivnet{
-		URL:   productURL,
+		PivURL: "https://network.pivotal.io/",
 		Token: token,
 	}
-	err = pivnet.Download(file)
+	err = pivnet.Download(file, productURL)
 	return
 }
 
