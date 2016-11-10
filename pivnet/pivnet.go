@@ -9,6 +9,7 @@ import (
 	"time"
 	"encoding/json"
 	"bytes"
+	"github.com/cloudfoundry/cli/cf/errors"
 )
 
 type Pivnet struct {
@@ -18,7 +19,7 @@ type Pivnet struct {
 
 type Product struct{
 	Id int64
-	Verstion string
+	Version string
 	AcceptUrl string
 	Files []ProductFile
 }
@@ -105,8 +106,27 @@ func (p *Pivnet) LatestProduct(productName string) (product Product, err error) 
 	}
 	product = Product{
 		Id: productResponse.Id,
+		Version: productResponse.Version,
 		AcceptUrl: productResponse.Links.EulaURL.Href,
 		Files: files,
 	}
 	return
+}
+
+func (p *Pivnet) AcceptEULA(url string) error{
+	r := &rest.Rest{
+		URL: url,
+	}
+	resp, err := r.Build().WithHttpMethod(rest.POST).WithHttpHeader("Authorization", fmt.Sprintf("Token %s", p.Token)).Connect()
+	if err != nil {
+		return err
+	}
+	if(resp.StatusCode == 401){
+		return errors.New("User is not authenticated. Check your token")
+	}
+	if(resp.StatusCode == 200){
+		return nil
+	} else {
+		return errors.New(fmt.Sprintf("UNKNOW ERROR"))
+	}
 }

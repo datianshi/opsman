@@ -203,5 +203,80 @@ var _ = Describe("Pivnet", func() {
 			})
 		})
 
+		Context("When Pivnet request the product latest version", func() {
+			var productName string = "elastic-runtime"
+			BeforeEach(func() {
+				statusCode = 200
+				server = ghttp.NewServer()
+				b := []byte(LATEST_RELEASE_RESP)
+				write_content = &b
+				pivnet = &Pivnet{
+					Token: TOKEN,
+					PivURL: server.URL(),
+				}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/api/v2/products/elastic-runtime/releases/latest"),
+					ghttp.VerifyHeaderKV("Authorization", fmt.Sprintf("Token %s", TOKEN)),
+					ghttp.RespondWithPtr(&statusCode, write_content),
+				))
+			})
+
+			It("Should return the latest product", func() {
+				product, err := pivnet.LatestProduct(productName)
+				Ω(err).Should(BeNil())
+				Ω(product.Id).Should(Equal(int64(2799)))
+				Ω(product.Version).Should(Equal("1.8.13"))
+				Ω(product.AcceptUrl).Should(Equal("https://network.pivotal.io/api/v2/products/elastic-runtime/releases/2799/eula_acceptance"))
+				Ω(product.Files[0].Name).Should(Equal("PCF Elastic Runtime 1.8 License"))
+				Ω(product.Files[0].DownloadUrl).Should(Equal("https://network.pivotal.io/api/v2/products/elastic-runtime/releases/2799/product_files/6741/download"))
+				Ω(product.Files[3].Name).Should(Equal("PCF Elastic Runtime"))
+				Ω(product.Files[3].DownloadUrl).Should(Equal("https://network.pivotal.io/api/v2/products/elastic-runtime/releases/2799/product_files/8851/download"))
+			})
+			AfterEach(func() {
+				server.Close()
+			})
+		})
+
+		Context("When Pivnet request the product latest version", func() {
+			var acceptPATH = "/api/v2/products/elastic-runtime/releases/2799/eula_acceptance"
+			BeforeEach(func() {
+				server = ghttp.NewServer()
+
+				pivnet = &Pivnet{
+					Token: TOKEN,
+					PivURL: server.URL(),
+				}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("POST", acceptPATH),
+					ghttp.VerifyHeaderKV("Authorization", fmt.Sprintf("Token %s", TOKEN)),
+					ghttp.RespondWithPtr(&statusCode, nil),
+				))
+			})
+			Context("When Response status code is 200", func(){
+				BeforeEach(func(){
+					statusCode = 200
+				})
+				It("Should return the latest product", func() {
+					err := pivnet.AcceptEULA(fmt.Sprintf("%s%s", server.URL(), acceptPATH))
+					Ω(err).Should(BeNil())
+				})
+			})
+
+			Context("When Response status code is 401", func(){
+				BeforeEach(func(){
+					statusCode = 401
+				})
+				It("Should return the latest product", func() {
+					err := pivnet.AcceptEULA(fmt.Sprintf("%s%s", server.URL(), acceptPATH))
+					Ω(err).ShouldNot(BeNil())
+				})
+			})
+
+
+			AfterEach(func() {
+				server.Close()
+			})
+		})
+
 	})
 })

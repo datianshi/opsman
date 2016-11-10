@@ -36,6 +36,12 @@ func main() {
 					Action: LatestProduct,
 					Flags:  []cli.Flag{ProductNAME, PivnetToken},
 				},
+				{
+					Name:   "accept-eula",
+					Usage:  "Accept EULA",
+					Action: AcceptEULA,
+					Flags:  []cli.Flag{EulaURL, PivnetToken},
+				},
 			},
 		},
 		{

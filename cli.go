@@ -11,6 +11,8 @@ import (
 	"encoding/json"
 )
 
+const PIV_NET_URL string = "https://network.pivotal.io/"
+
 var OpsManagerURLFlag *cli.StringFlag = &cli.StringFlag{
 	Name:    "opsmanurl",
 	Aliases: []string{"ops"},
@@ -73,6 +75,13 @@ var UploadProductFrom *cli.StringFlag = &cli.StringFlag{
 	EnvVars: []string{"UPLOAD_PRODUCT_FROM"},
 }
 
+var EulaURL *cli.StringFlag = &cli.StringFlag{
+	Name:    "eulaurl",
+	Usage:   "eula url",
+	Aliases: []string{"eu"},
+	EnvVars: []string{"EULA_URL"},
+}
+
 var UploadStemcellFrom *cli.StringFlag = &cli.StringFlag{
 	Name:    "from",
 	Usage:   "Upload stemcell from",
@@ -90,7 +99,7 @@ func DownloadProduct(c *cli.Context) (err error) {
 		return
 	}
 	pivnet := pivnet.Pivnet{
-		PivURL: "https://network.pivotal.io/",
+		PivURL: PIV_NET_URL,
 		Token: token,
 	}
 	err = pivnet.Download(file, productURL)
@@ -104,7 +113,7 @@ func LatestProduct(c *cli.Context) (err error) {
 		return
 	}
 	pivnet := pivnet.Pivnet{
-		PivURL: "https://network.pivotal.io/",
+		PivURL: PIV_NET_URL,
 		Token: token,
 	}
 	product, err := pivnet.LatestProduct(productName)
@@ -116,6 +125,23 @@ func LatestProduct(c *cli.Context) (err error) {
 		return
 	}
 	fmt.Println(string(b))
+	return
+}
+
+func AcceptEULA(c *cli.Context) (err error) {
+	eulaURL := c.String("eulaurl")
+	token := c.String("token")
+	if err != nil {
+		return
+	}
+	pivnet := pivnet.Pivnet{
+		PivURL: PIV_NET_URL,
+		Token: token,
+	}
+	err = pivnet.AcceptEULA(eulaURL)
+	if(err!=nil){
+		return
+	}
 	return
 }
 
