@@ -40,6 +40,12 @@ COMMANDS:
    ]
 }
 ```
+
+* Accept one release
+
+```
+./opsman-cli pivnet accept-eula --eulaurl EULA_URL --token XXX
+```
 * Download a tile from Pivnet
 
 ```
