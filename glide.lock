@@ -1,5 +1,5 @@
-hash: c0180f23b5ddc2fce7f94374c67ad8682952c354e0fad87aab7f00cd8093f61e
-updated: 2016-12-23T10:00:21.565294577-06:00
+hash: 2a80ec0bfd3c9d26d5f1ae0b0ccf6c09e55ebce19c01ff72a6ff4cc96adc0e99
+updated: 2016-12-23T10:04:39.491895101-06:00
 imports:
 - name: github.com/datianshi/rest-func
   version: e86d2b5c31a91b86c6fca7f6a25993151e2f6e07
@@ -8,6 +8,8 @@ imports:
   - barfile
 - name: github.com/mattn/go-runewidth
   version: 737072b4e32b7a5018b4a7125da8d12de90e8045
+- name: github.com/onsi/ginkgo
+  version: e185767ab450dd717718019ebe6115112af5c575
 - name: github.com/onsi/gomega
   version: f1f0f388b31eca4e2cbe7a6dd8a3a1dfddda5b1c
   subpackages:

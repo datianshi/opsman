@@ -6,3 +6,4 @@ import:
 - package: github.com/onsi/gomega
 - package: gopkg.in/cheggaaa/pb.v1
 - package: gopkg.in/urfave/cli.v2
+- package: github.com/onsi/ginkgo
