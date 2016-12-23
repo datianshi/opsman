@@ -3,3 +3,6 @@ import:
 - package: github.com/datianshi/rest-func
   subpackages:
   - rest
+- package: github.com/onsi/gomega
+- package: gopkg.in/cheggaaa/pb.v1
+- package: gopkg.in/urfave/cli.v2
