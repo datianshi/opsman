@@ -7,3 +7,6 @@ import:
 - package: gopkg.in/cheggaaa/pb.v1
 - package: gopkg.in/urfave/cli.v2
 - package: github.com/onsi/ginkgo
+- package: github.com/golang/protobuf
+  subpackages:
+  - proto
