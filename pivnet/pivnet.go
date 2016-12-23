@@ -1,59 +1,60 @@
 package pivnet
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/datianshi/rest-func/rest"
-	"gopkg.in/cheggaaa/pb.v1"
 	"io"
 	"strconv"
 	"time"
-	"encoding/json"
-	"bytes"
-	"github.com/cloudfoundry/cli/cf/errors"
+
+	"github.com/datianshi/rest-func/rest"
+	"gopkg.in/cheggaaa/pb.v1"
 )
 
 type Pivnet struct {
-	Token string
+	Token  string
 	PivURL string
 }
 
-type Product struct{
-	Id int64
-	Version string
+type Product struct {
+	Id        int64
+	Version   string
 	AcceptUrl string
-	Files []ProductFile
+	Files     []ProductFile
 }
 
-type ProductFile struct{
-	Name string
+type ProductFile struct {
+	Name        string
 	DownloadUrl string
 }
 
-type LatestResponse struct{
-	Id int64
-	Version string
-	Eula Eula
+type LatestResponse struct {
+	Id            int64
+	Version       string
+	Eula          Eula
 	Product_files []ProductFileResponse
+	Links         Links `json:"_links"`
+}
+
+type ProductFileResponse struct {
+	Id    int64
+	Name  string
 	Links Links `json:"_links"`
 }
 
-type ProductFileResponse struct{
-	Id int64
-	Name string
+type Eula struct {
 	Links Links `json:"_links"`
 }
 
-type Eula struct{
-	Links Links `json:"_links"`
-}
-
-type Links struct{
-	Self URL
+type Links struct {
+	Self     URL
 	Download URL
-	EulaURL URL `json:"eula_acceptance"`
+	EulaURL  URL `json:"eula_acceptance"`
 }
 
-type URL struct{
+type URL struct {
 	Href string
 }
 
@@ -85,7 +86,7 @@ func (p *Pivnet) LatestProduct(productName string) (product Product, err error) 
 	}
 
 	resp, err := r1.Build().WithHttpHeader("Authorization", fmt.Sprintf("Token %s", p.Token)).Connect()
-	if err!=nil{
+	if err != nil {
 		return
 	}
 	defer resp.Body.Close()
@@ -93,27 +94,27 @@ func (p *Pivnet) LatestProduct(productName string) (product Product, err error) 
 	var b bytes.Buffer
 	io.Copy(&b, resp.Body)
 	err = json.Unmarshal(b.Bytes(), &productResponse)
-	if (err!=nil){
+	if err != nil {
 		return
 	}
 	files := make([]ProductFile, 0)
-	for _, r := range productResponse.Product_files{
-		file:= ProductFile{
-			Name: r.Name,
+	for _, r := range productResponse.Product_files {
+		file := ProductFile{
+			Name:        r.Name,
 			DownloadUrl: r.Links.Download.Href,
 		}
 		files = append(files, file)
 	}
 	product = Product{
-		Id: productResponse.Id,
-		Version: productResponse.Version,
+		Id:        productResponse.Id,
+		Version:   productResponse.Version,
 		AcceptUrl: productResponse.Links.EulaURL.Href,
-		Files: files,
+		Files:     files,
 	}
 	return
 }
 
-func (p *Pivnet) AcceptEULA(url string) error{
+func (p *Pivnet) AcceptEULA(url string) error {
 	r := &rest.Rest{
 		URL: url,
 	}
@@ -121,10 +122,10 @@ func (p *Pivnet) AcceptEULA(url string) error{
 	if err != nil {
 		return err
 	}
-	if(resp.StatusCode == 401){
+	if resp.StatusCode == 401 {
 		return errors.New("User is not authenticated. Check your token")
 	}
-	if(resp.StatusCode == 200){
+	if resp.StatusCode == 200 {
 		return nil
 	} else {
 		return errors.New(fmt.Sprintf("UNKNOW ERROR"))
