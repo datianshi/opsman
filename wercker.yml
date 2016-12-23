@@ -56,9 +56,9 @@ crosscompile:
     - script:
         name: cross platform release
         code: |
-          (GOOS=linux GOARCH=amd64 go build -o opsman-linux -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
-          (GOOS=darwin GOARCH=amd64 go build -o opsman-osx -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
-          (GOOS=windows GOARCH=amd64 go build -o opsman.exe -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
+          (GOOS=linux GOARCH=amd64 go build -o opsman-linux -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go cli.go)
+          (GOOS=darwin GOARCH=amd64 go build -o opsman-osx -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go cli.go)
+          (GOOS=windows GOARCH=amd64 go build -o opsman.exe -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go cli.go)
 
     - script:
         name: add repo to artifact
