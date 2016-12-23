@@ -56,9 +56,9 @@ crosscompile:
     - script:
         name: cross platform release
         code: |
-          (GOOS=linux GOARCH=amd64 go build -o goblob-linux -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
-          (GOOS=darwin GOARCH=amd64 go build -o goblob-osx -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
-          (GOOS=windows GOARCH=amd64 go build -o goblob.exe -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
+          (GOOS=linux GOARCH=amd64 go build -o opsman-linux -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
+          (GOOS=darwin GOARCH=amd64 go build -o opsman-osx -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
+          (GOOS=windows GOARCH=amd64 go build -o opsman.exe -ldflags "-X main.VERSION=${NEXT_VERSION}" main.go)
 
     - script:
         name: add repo to artifact
@@ -101,16 +101,16 @@ deploy:
 
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: goblob-linux
+        file: opsman-linux
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: goblob-osx
+        file: opsman-osx
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: goblob.exe
+        file: opsman.exe
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip

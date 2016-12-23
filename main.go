@@ -6,8 +6,11 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
+var (
+	VERSION = ""
+)
+
 func main() {
-	const VERSION string = "0.0.7"
 	app := &cli.App{
 		Name:     "opsman-cli",
 		HelpName: "opsman-cli",
@@ -21,8 +24,8 @@ func main() {
 			Flags:  []cli.Flag{OpsManagerURLFlag, Username, Password, SkipSSL},
 		},
 		{
-			Name:        "pivnet",
-			Usage:       "pivnet",
+			Name:  "pivnet",
+			Usage: "pivnet",
 			Subcommands: []*cli.Command{
 				{
 					Name:   "download",
